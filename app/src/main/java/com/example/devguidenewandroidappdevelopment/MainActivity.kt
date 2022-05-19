@@ -8,9 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.devguidenewandroidappdevelopment.ui.theme.DevGuideNewAndroidAppDevelopmentTheme
 
 class MainActivity : ComponentActivity() {
@@ -108,6 +107,55 @@ fun ExampleBasicLayout() {
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(16.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewExampleCOnstaintLayout() {
+    ExampleConstaintLayout()
+}
+
+@Composable
+fun ExampleConstaintLayout() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        val (text1Ref, edit1Ref, btn1Ref, btn2Ref) = createRefs()
+        Text("Name", modifier = Modifier.constrainAs(text1Ref) {
+            top.linkTo(parent.top)
+            centerHorizontallyTo(parent)
+        })
+        TextField(
+            value = "Name",
+            onValueChange = {},
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .background(color = Color.LightGray)
+                .constrainAs(edit1Ref) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(text1Ref.bottom)
+                })
+        Button(onClick = {}, modifier = Modifier
+            .padding(top = 8.dp)
+            .constrainAs(btn1Ref) {
+                end.linkTo(edit1Ref.end)
+                top.linkTo(edit1Ref.bottom)
+            },
+            content = { Text(text = "OK") }
+        )
+        TextButton(
+            onClick = {}, modifier = Modifier
+                .padding(end = 8.dp)
+                .constrainAs(btn2Ref) {
+                    end.linkTo(btn1Ref.start)
+                    baseline.linkTo(btn1Ref.baseline)
+                },
+            content = { Text(text = "Cancel") }
         )
     }
 }
