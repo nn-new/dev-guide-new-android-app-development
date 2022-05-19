@@ -9,7 +9,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    MyApp()
                 }
             }
         }
@@ -39,8 +40,32 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun MyApp(names: List<String> = listOf("World", "Compose")) {
+    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+        for (name in names) {
+            Greeting(name = name)
+        }
+    }
+}
+
+
+@Composable
 fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+    var extended by rememberSaveable { mutableStateOf(false)}
+    Surface(
+        color = MaterialTheme.colors.primary,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
+        Row(modifier = Modifier.padding(24.dp)) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = "Hello")
+                Text(text = name)
+            }
+            OutlinedButton(onClick = { extended = !extended }) {
+                Text(if (extended) "Show less" else "Show more")
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -164,6 +189,6 @@ fun ExampleConstaintLayout() {
 @Composable
 fun DefaultPreview() {
     DevGuideNewAndroidAppDevelopmentTheme {
-        Greeting("Android")
+        MyApp()
     }
 }
